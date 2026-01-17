@@ -118,7 +118,7 @@ model ProductTagEvent {
   product_id     String
   product         Product   @relation(fields: [product_id], references: [product_id])
   TagEvent       TagEvent   @relation(fields: [tag_id], references: [tag_id])
-  tag_name      String
+
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
   @@id([tag_id, product_id])
