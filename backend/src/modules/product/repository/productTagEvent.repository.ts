@@ -19,12 +19,9 @@ const productTagEventRepository = {
             }
         });
     },
-    createProductTagEvent: async (tag_id: number, product_id: string) => {
-        return await prisma.productTagEvent.create({
-            data: {
-                TagEvent:{connect: {tag_id}},
-                product: {connect: {product_id:product_id}}
-            },
+    createProductTagEvent: async (data:{ tag_id: number, product_id: string }[]) => {
+        return await prisma.productTagEvent.createMany({
+            data
         });
     },
     deleteProductTagEvent: async (product_id: string) => {

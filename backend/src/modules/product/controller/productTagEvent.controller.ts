@@ -14,14 +14,15 @@ const getProductTagEventsByProductId = asyncHandler( async (req: Request, res: R
 });
 
 const createProductTagEvent = asyncHandler( async (req: Request, res: Response) => {
-    const { tag_id, product_id } = req.body;
-    const newProductTagEvent = await createProductTagEventService(tag_id, product_id);
+    const data = req.body;
+    const newProductTagEvent = await createProductTagEventService(data);
     res.status(201).json({data: newProductTagEvent});
 });
 
 const updateProductTagEvent = asyncHandler( async (req: Request, res: Response) => {
-    const { tag_id, product_id, newTagId } = req.body;
-    const updatedProductTagEvent = await updateProductTagEventService(tag_id, product_id, newTagId);
+    const data  = req.body;
+    const product_id = req.params.product_id;
+    const updatedProductTagEvent = await updateProductTagEventService(data, product_id);
     res.status(200).json({data: updatedProductTagEvent});
 });
 
