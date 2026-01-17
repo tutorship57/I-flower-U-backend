@@ -1,0 +1,65 @@
+# ----------------------------------
+# Node / Backend
+# ----------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output (TypeScript)
+dist/
+build/
+out/
+
+# Cache
+.cache/
+.temp/
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Coverage / tests
+coverage/
+.nyc_output/
+jest-test-results.json
+
+# ----------------------------------
+# TypeScript
+# ----------------------------------
+*.tsbuildinfo
+
+# ----------------------------------
+# Environment & secrets
+# ----------------------------------
+.env
+!.env.example   # keep template only
+.env.*
+
+
+# ----------------------------------
+# Prisma
+# (migrations should NOT be ignored)
+# ----------------------------------
+prisma/dev.db
+prisma/dev.db-journal
+/src/generated/prisma/
+
+# ----------------------------------
+# Docker (optional)
+# ----------------------------------
+docker-data/
+docker-compose.override.yml
+*.pid
+
+# ----------------------------------
+# OS / Editor
+# ----------------------------------
+.DS_Store
+Thumbs.db
+
+.vscode/
+.idea
+*.swp
