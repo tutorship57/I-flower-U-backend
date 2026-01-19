@@ -19,18 +19,15 @@ const productColorRepository = {
       where: { color_id },
     });
   },
-  createProductColor: async (data: ProductColorData) => {
-    return await prisma.productColor.create({
+  createProductColor: async (data: ProductColorData[]) => {
+    return await prisma.productColor.createMany({
       data,
     });
   },
-  deleteProductColor: async (data: ProductColorData) => {
-    return await prisma.productColor.delete({
+  deleteProductColor: async (product_id: string) => {
+    return await prisma.productColor.deleteMany({
       where: {
-        product_id_color_id: {
-          product_id: data.product_id,
-          color_id: data.color_id,
-        },
+        product_id: product_id,
       },
     });
   },
