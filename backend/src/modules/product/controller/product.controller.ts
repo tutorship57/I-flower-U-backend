@@ -28,7 +28,7 @@ const getAllProductByShopID = asyncHandler( async (req: Request, res: Response) 
 const createProduct = asyncHandler( async (req: Request, res: Response) => {
     const data = req.body;
     const files = req.files as Express.Multer.File[];
-    const newProduct = await createProductService(data, files);
+    const newProduct = await createProductService(data);
     res.status(201).json({data: newProduct});
 });
 

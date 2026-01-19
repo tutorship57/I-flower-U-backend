@@ -38,17 +38,12 @@ const getProductByIdsService = async (product_ids: string[]) => {
     return products;
 }
 
-const createProductService = async (data: {product_name: string; category_id: number; product_price: number; product_stock: number; description?: string;shop_id: string},files: Express.Multer.File[]) => {
+const createProductService = async (data: {product_name: string; category_id: number; product_price: number; product_stock: number; description?: string;shop_id: string}) => {
     const newProduct = await productRepo.createProduct(data);
     if( !newProduct){
         throw new AppError('Product creation failed', 500);
     }
-    if( !files || files.length === 0){
-        return newProduct;
-    }
-    await redis.set(`stock:${newProduct.product_id}`, newProduct.product_stock.toString());
-    const newImages = await createProductImagesService(newProduct.product_id, files);
-    return {...newProduct, images: newImages};
+    return newProduct;
 }
 const createManyProductService = async (data: {product_name: string; category_id: number; product_price: number; product_stock: number; description?: string;shop_id: string}[]) => {
     const newProduct = await productRepo.createManyProduct(data);
