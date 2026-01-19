@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../../../shared/middleware/asyncHandler.Middleware";
 
 const getAllProductTagEvents = asyncHandler( async (req: Request, res: Response) => {
+    const product_id = req.params.product_id;
     const productTagEvents = await getAllProductTagEventsService();
     res.status(200).json({data: productTagEvents});
 });
@@ -14,20 +15,22 @@ const getProductTagEventsByProductId = asyncHandler( async (req: Request, res: R
 });
 
 const createProductTagEvent = asyncHandler( async (req: Request, res: Response) => {
+    const product_id = req.params.product_id;
     const data = req.body;
-    const newProductTagEvent = await createProductTagEventService(data);
+    const newProductTagEvent = await createProductTagEventService(product_id,data);
     res.status(201).json({data: newProductTagEvent});
 });
 
 const updateProductTagEvent = asyncHandler( async (req: Request, res: Response) => {
-    const data  = req.body;
     const product_id = req.params.product_id;
-    const updatedProductTagEvent = await updateProductTagEventService(data, product_id);
+    const data  = req.body;
+    const updatedProductTagEvent = await updateProductTagEventService(product_id, data);
     res.status(200).json({data: updatedProductTagEvent});
 });
 
 const deleteProductTagEvent = asyncHandler( async (req: Request, res: Response) => {
-    const { tag_id, product_id } = req.body;
+    const product_id = req.params.product_id;
+    const { tag_id } = req.body;
     const deletedProductTagEvent = await deleteProductTagEventService(tag_id, product_id);
     res.sendStatus(204);
 });
