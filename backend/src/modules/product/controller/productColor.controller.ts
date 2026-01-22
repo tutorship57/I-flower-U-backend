@@ -16,8 +16,8 @@ const getProductColorById = asyncHandler(async (req: Request, res: Response) => 
 
 const createProductColor = asyncHandler(async (req: Request, res: Response) => {
     const product_id = req.params.product_id;
-    const data = req.body;
-    const newProductColor = await createProductColorService(product_id, data);
+    const { colors } = req.body;
+    const newProductColor = await createProductColorService(product_id, colors);
     return res.status(201).json({data: newProductColor});
 });
 

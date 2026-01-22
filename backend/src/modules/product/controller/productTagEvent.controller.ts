@@ -16,8 +16,8 @@ const getProductTagEventsByProductId = asyncHandler( async (req: Request, res: R
 
 const createProductTagEvent = asyncHandler( async (req: Request, res: Response) => {
     const product_id = req.params.product_id;
-    const data = req.body;
-    const newProductTagEvent = await createProductTagEventService(product_id,data);
+    const {tags} = req.body;
+    const newProductTagEvent = await createProductTagEventService(product_id,tags);
     res.status(201).json({data: newProductTagEvent});
 });
 
