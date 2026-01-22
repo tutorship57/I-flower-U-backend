@@ -13,6 +13,7 @@ import flowerTypeRouter from '../modules/product/routes/flowerType.route';
 import orderRouter from '../modules/order/routes/order.route';
 import userRouter from '../modules/user/routes/user.route';
 import shopRouter from '../modules/shop/routes/shop.route';
+import tagEventRouter from '../modules/product/routes/productTagEvent.route';
 //order route เหลือ
 const router = Router();
 
@@ -30,6 +31,7 @@ router.use('/category', categoryRouter);
 router.use('/color', colorRouter);
 router.use('/flower-type', flowerTypeRouter);
 router.use('/role', roleRouter);
+router.use('/tag-event', tagEventRouter);
 //shop routes
 router.use('/shop', shopRouter); // Shop routes to be added here
 //health check route

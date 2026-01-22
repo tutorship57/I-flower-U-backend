@@ -3,7 +3,9 @@ import { createProductTagEvent, getAllProductTagEvents, getProductTagEventsByPro
 
 import { Router } from "express";
 
-const router = Router();
+const router = Router({
+    mergeParams: true
+});
 
 router.get("/", getAllProductTagEvents);
 router.get("/:tag_id", getProductTagEventsByProductId);
