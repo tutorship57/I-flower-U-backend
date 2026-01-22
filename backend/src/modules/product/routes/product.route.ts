@@ -3,6 +3,7 @@ import {Router } from "express";
 import { createProduct,  getProductByIds,createManyProduct, deleteProduct,getAllProduct,getAllProductByShopID, getProductById, updateProduct } from "../controller/product.controller";
 import productImageRouter from './productImage.route';
 import colorTypeRouter from './colorType.route';
+import tagRouter from './productTagEvent.route';
 const router = Router();
 
 router.get("/", getAllProduct);
@@ -16,5 +17,6 @@ router.delete("/:product_id", deleteProduct);
 
 router.use('/:product_id/images', productImageRouter);
 router.use('/:product_id/colors', colorTypeRouter);
+router.use('/:product_id/tags', tagRouter);
 
 export default router;
