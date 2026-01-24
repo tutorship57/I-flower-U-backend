@@ -13,7 +13,7 @@ import flowerTypeRouter from '../modules/product/routes/flowerType.route';
 import orderRouter from '../modules/order/routes/order.route';
 import userRouter from '../modules/user/routes/user.route';
 import shopRouter from '../modules/shop/routes/shop.route';
-import tagEventRouter from '../modules/product/routes/productTagEvent.route';
+import tagEventRouter from '../modules/product/routes/tagEvent.route';
 //order route เหลือ
 const router = Router();
 
