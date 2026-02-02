@@ -1,5 +1,6 @@
 import paymentRepository from "../repository/payment.repository";
 import { PaymentStatusEnum } from "../../../shared/types/enum/payment/paymentStatus";
+import { Prisma } from ".prisma/client/default.js";
 const createPaymentService = async (data: { order_id: string; session_id: string; paytype_id: number, amount: number, payment_url: string}) => {
     const newPayment = await paymentRepository.createPayment(data);
     return newPayment;
@@ -33,8 +34,8 @@ const updatePaymentService = async (payment_id: string, data: { order_id?: strin
     return updatedPayment;
 }
 
-const updatePaymentStatusService = async (payment_id: string, payment_status:   PaymentStatusEnum) => {
-    const updatedPayment = await paymentRepository.updatePaymentStatus(payment_id, payment_status);
+const updatePaymentStatusService = async (tx:Prisma.TransactionClient,payment_id: string, payment_status:   PaymentStatusEnum) => {
+    const updatedPayment = await paymentRepository.updatePaymentStatus(tx, payment_id, payment_status);
     if(!updatedPayment){
         throw new Error("Payment not found");
     }

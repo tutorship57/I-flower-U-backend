@@ -12,7 +12,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  
+
 }
 
 
@@ -73,7 +73,6 @@ model Product {
   product_name        String
   product_description String?   
   product_price      Float
-  product_stock      Int 
   shop_id       String
   category_id     Int
   category        Category? @relation(fields: [category_id], references: [category_id])
@@ -85,12 +84,77 @@ model Product {
   shop          Shop    @relation(fields: [shop_id], references: [shop_id])
   setsAsSet   ProductSet[] @relation("setProducts")
   setsAsItem  ProductSet[] @relation("singleItem")
+  productStocks   ProductStock[]
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
   @@index([shop_id])
   @@index([category_id])
   @@index([product_name])
 }
+
+
+model ProductStock{
+  stock_id      String       @id @default(cuid())
+  product_id     String
+  stock_qty         Int
+  reserved_qty      Int     @default(0)
+  // warehouse_id String?
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  product       Product   @relation(fields: [product_id], references: [product_id])
+  stockTransactions TransactionStock[]
+  productionReservations ReservationStock[]
+
+  @@index([product_id])
+  @@unique([product_id, stock_id])
+}
+
+model ReservationStock{
+  reservation_id      String       @id @default(cuid())
+  stock_id     String
+  reserved_qty    Int
+  reserved_status  reserved_status @default(ACTIVE)
+  order_id     String
+  expiry_at  DateTime
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  order  Order   @relation(fields: [order_id], references: [order_id])
+  productStock       ProductStock   @relation(fields: [stock_id], references: [stock_id])
+  @@index([order_id])
+}
+
+enum reserved_status {
+  ACTIVE
+  COMPLETED
+  EXPIRED
+  CANCELLED
+}
+
+model TransactionStock{
+  transaction_id      String       @id @default(cuid())
+  stock_id     String
+  change_qty    Int 
+  reason       StockReason?
+  transaction_type TransactionType 
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  productStock       ProductStock   @relation(fields: [stock_id], references: [stock_id])
+}
+
+enum TransactionType {
+  ADD
+  REMOVE
+}
+
+enum StockReason {
+  ORDER
+  RESTOCK
+  CANCEL
+  RETURN
+  ADJUSTMENT
+  DAMAGED
+}
+
 model ProductSet{
   set_id    String  // FK  Product.product_id (SET)
   item_id   String  // FK  Product.product_id (SINGLE)
@@ -191,6 +255,7 @@ model Order {
   updated_at    DateTime  @updatedAt  
   user          User     @relation(fields: [user_id], references: [user_id])
   orderItems    OrderItem[]
+  reservedStocks  ReservationStock[]
   payments     Payment[]
   @@index([user_id])
 }
@@ -220,7 +285,7 @@ model OrderItem {
 // Payment Modules
 model Payment {
   payment_id      String       @id @default(cuid())
-  order_id        String
+  order_id        String  @unique
   session_id      String  @unique  
   paytype_id      Int? 
   payment_url   String?

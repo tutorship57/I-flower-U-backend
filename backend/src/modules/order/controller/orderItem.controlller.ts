@@ -2,7 +2,6 @@ import { getOrderItemByIdService, getOrderItemsByOrderIdService, createOrderItem
 
 import { Request, Response } from "express";
 import { asyncHandler } from "../../../shared/middleware/asyncHandler.Middleware";
-import { AppError } from "../../../shared/utils/appErrorCustomize.util";
 
 const getOrderItemById = asyncHandler( async (req: Request, res: Response ) => {
     const { item_id } = req.params;
@@ -25,15 +24,15 @@ const createOrderItem = asyncHandler( async (req: Request, res: Response ) => {
     return res.status(201).json({ message, orderItem: newOrderItem });
 });
 
-const createManyOrderItems = asyncHandler( async (req: Request, res: Response ) => {
-    const data = req.body;
-    if (!Array.isArray(data) || data.length === 0) {
-        throw new AppError("Request body must be a non-empty array", 400);
-    }
-    const newOrderItems = await createManyOrderItemService(data);
-    const message = 'Order items created successfully';
-    return res.status(201).json({ message, orderItems: newOrderItems });
-});
+// const createManyOrderItems = asyncHandler( async (req: Request, res: Response ) => {
+//     const data = req.body;
+//     if (!Array.isArray(data) || data.length === 0) {
+//         throw new AppError("Request body must be a non-empty array", 400);
+//     }
+//     const newOrderItems = await createManyOrderItemService(data);
+//     const message = 'Order items created successfully';
+//     return res.status(201).json({ message, orderItems: newOrderItems });
+// });
 
 const updateOrderItem = asyncHandler( async (req: Request, res: Response ) => {
     const { item_id } = req.params;
@@ -50,4 +49,4 @@ const deleteOrderItem = asyncHandler( async (req: Request, res: Response ) => {
     return res.status(200).json({ message, orderItem: deletedOrderItem });
 });
 
-export { getOrderItemById, getOrderItemsByOrderId, createOrderItem, updateOrderItem, deleteOrderItem, createManyOrderItems };
+export { getOrderItemById, getOrderItemsByOrderId, createOrderItem, updateOrderItem, deleteOrderItem };

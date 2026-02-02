@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../../../shared/middleware/asyncHandler.Middleware";
 import { AppError } from "../../../shared/utils/appErrorCustomize.util";
-import {getCartItemsByCartIdService, createCartItemService, updateCartItemService, deleteCartItemService} from "../service/cartItem.service";
+import {getCartItemsByCartIdService, createCartItemService, updateCartItemService, deleteCartItemService, getAggregateCartItemsByCartIdService} from "../service/cartItem.service";
 
 const getCartItemsByCartId = asyncHandler(async (req: Request, res: Response) => {
     const cart_id = req.params.cart_id;
@@ -11,9 +11,18 @@ const getCartItemsByCartId = asyncHandler(async (req: Request, res: Response) =>
     });
 });
 
+const getAggregateCartItem = asyncHandler(async (req: Request, res: Response) => {
+    const cart_id = req.params.cart_id;
+    const cartItemsAggregate = await getAggregateCartItemsByCartIdService(cart_id);
+    return res.status(200).json({
+        data:cartItemsAggregate
+    });
+});
+
 const createCartItem = asyncHandler(async (req: Request, res: Response) => {
     const data = req.body;
-    const newCartItem = await createCartItemService(data);
+    const cart_id = req.params.cart_id;
+    const newCartItem = await createCartItemService(cart_id,data);
     return res.status(201).json({
         data: newCartItem
     });
@@ -34,4 +43,4 @@ const deleteCartItem = asyncHandler(async (req: Request, res: Response) => {
     return res.sendStatus(204);
 });
 
-export {getCartItemsByCartId, createCartItem, updateCartItem, deleteCartItem};
+export {getCartItemsByCartId,getAggregateCartItem ,createCartItem, updateCartItem, deleteCartItem};

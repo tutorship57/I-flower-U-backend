@@ -19,6 +19,10 @@ const createUserService = async (data: {user_name: string; user_email: string; u
     const newUser = await userRepository.createUser(data);
     return newUser;
 }
+const getUserProfileService = async (user_id: string) => {
+    const user = await userRepository.getUserProfile(user_id);
+    return user;
+}
 
 const deleteUserService = async (user_id: string) => {
     await userRepository.deleteUser(user_id);
@@ -28,4 +32,4 @@ const findUserByEmailService = async (email: string) => {
     return user;
 }
 
-export { getUserByIdService,getAllUserService, updateUserService, deleteUserService, findUserByEmailService, createUserService };    
+export { getUserByIdService,getUserProfileService,getAllUserService, updateUserService, deleteUserService, findUserByEmailService, createUserService };    

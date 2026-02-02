@@ -1,5 +1,5 @@
 {
-    "watch": ["src"],
+    "watch": ["src", ".env", ".env.local", ".env.development"],
     "ignore": ["src/**/*.spec.ts"],
     "ext": "ts,html,css,js,json",
     "exec": "ts-node --files ./src/index.ts"

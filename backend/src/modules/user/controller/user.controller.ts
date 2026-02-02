@@ -1,10 +1,17 @@
-import { getAllUserService,getUserByIdService,updateUserService,deleteUserService, createUserService } from "../service/user.service";
+import { getAllUserService,getUserByIdService,updateUserService,deleteUserService, createUserService, getUserProfileService } from "../service/user.service";
 import { Request, Response } from "express";
 import { asyncHandler } from "../../../shared/middleware/asyncHandler.Middleware";
+import { get } from "node:http";
 const getUserByIdController = asyncHandler( async (req: Request, res: Response) => {  
     const user_id = req.params.user_id;
     const result = await getUserByIdService(user_id);
     res.status(200).json({data: result});
+});
+
+const getProfile = asyncHandler( async (req: Request, res: Response) => { 
+    const user_id = req.session.user_id; 
+    const result = await getUserProfileService(user_id);
+    res.status(200).json({data: result});   
 });
 
 const getAllUserController = asyncHandler( async (req: Request, res: Response) => {  
@@ -31,4 +38,4 @@ const deleteUserController = asyncHandler( async (req: Request, res: Response) =
     res.sendStatus(204);
 });
 
-export {createUserController, getUserByIdController, getAllUserController, updateUserController, deleteUserController };
+export {createUserController,getProfile, getUserByIdController, getAllUserController, updateUserController, deleteUserController };

@@ -16,7 +16,7 @@ const paymentTypeRepository = {
         });
     },
 
-    createPaymentType: async (data: { paytype_name: string; description: string }) => {
+    createPaymentType: async (data: { paytype_name: string }) => {
         return await prisma.payType.create({
             data,
         });

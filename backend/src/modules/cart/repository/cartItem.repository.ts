@@ -6,6 +6,16 @@ const cartItemRepository = {
             where: {cart_item_id},
         });
     },
+    getCartItemsSumByCartId: async (cart_id: string) => {
+        const result = await prisma.$queryRaw<
+  { total_amount: number | null }[]
+>`
+  SELECT SUM(unit_price * quantity) AS total_amount
+  FROM public."CartItem"
+  WHERE cart_id = ${cart_id}
+`;
+        return result[0]?.total_amount?? 0;
+    },
     getCartItemsByCartId: async (cart_id: string) => {
         return await prisma.cartItem.findMany({
             where: {cart_id},

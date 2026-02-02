@@ -14,18 +14,18 @@ const getOrderByIdController =asyncHandler(async (req: Request, res: Response) =
     return res.status(200).json({ data: order });
 });
 
-const cancelOrderController =asyncHandler(async (req: Request, res: Response) => {
-    const { order_id } = req.params;
-    const updatedOrder = await updateOrderStatusService(order_id, OrderStatusEnum.CANCEL); 
-    return res.status(200).json({ data: updatedOrder });
-});
+// const cancelOrderController =asyncHandler(async (req: Request, res: Response) => {
+//     const { order_id } = req.params;
+//     const updatedOrder = await updateOrderStatusService(order_id, OrderStatusEnum.CANCEL); 
+//     return res.status(200).json({ data: updatedOrder });
+// });
 
-const updateOrderStatusController =asyncHandler(async (req: Request, res: Response) => {
-    const { order_id } = req.params;
-    const { order_status } = req.body;
-    const updatedOrder = await updateOrderStatusService(order_id, order_status);
-    return res.status(200).json({data: updatedOrder });
-});
+// const updateOrderStatusController =asyncHandler(async (req: Request, res: Response) => {
+//     const { order_id } = req.params;
+//     const { order_status } = req.body;
+//     const updatedOrder = await updateOrderStatusService(order_id, order_status);
+//     return res.status(200).json({data: updatedOrder });
+// });
 
 const deleteOrderController =asyncHandler(async (req: Request, res: Response) => {
     const { order_id } = req.params;
@@ -34,4 +34,4 @@ const deleteOrderController =asyncHandler(async (req: Request, res: Response) =>
 });
 
 
-export { cancelOrderController,getOrdersController, deleteOrderController,getOrderByIdController,updateOrderStatusController};
+export { getOrdersController, deleteOrderController,getOrderByIdController};

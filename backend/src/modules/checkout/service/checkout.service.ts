@@ -1,50 +1,101 @@
-import { createOrderService } from "../../order/service/order.service";
+import prisma from "../../../shared/prisma/prismaClient";
+import { Prisma } from "@prisma/client";
+import { createOrderService,} from "../../order/service/order.service";
 import { getCartItemsByCartIdService } from "../../cart/service/cartItem.service";
 import { AppError } from "../../../shared/utils/appErrorCustomize.util";
 import { validateCartAndSplitItem } from "../helper/checkout.helper";
-import { reserveStockQueue } from "../../../shared/bullMQ/stock/stock.queue";
 import { createManyOrderItemService } from "../../order/service/orderItem.service";
-import checkoutRepository from "../repository/checkout.repository";
+import { stripePaymentQueue } from "../../../shared/bullMQ/payment/payment.queue";
+import { addMinutesToDate } from "../../../shared/utils/converse-time.util";
+import { TransactionStockEnum } from "../../../shared/types/enum/stock/transaction-stock.enum";
+import { CreateTransactionStockInterface } from "../../../shared/types/interface/stock/transaction-stock.interface";
+import { getAllProductsStockServiceByProductId, updateReservationsQueryRawService } from "../../stock/service/product-stock.service";
+import { createReservationStocksService} from "../../stock/service/reservation-stock.service";
+import { ReservationStockInterface } from "../../../shared/types/interface/stock/reservation-stock.interface";
+import { getAggregateCartItemsByCartIdService } from "../../cart/service/cartItem.service";
+
 const checkoutService = async (data: {
   user_id: string;
-  total_amount: number;
-  items: Array<{ product_id: string; quantity: number; unit_price: number }>;
+  // total_amount: number;
+  // items: Array<{ product_id: string; quantity: number; unit_price: number }>;
   cart_id: string;
+
 }) => {
-  const { user_id, total_amount, items, cart_id } = data;
 
+  const { user_id,  cart_id } = data;
   const cartItems = await getCartItemsByCartIdService(cart_id);
+  // const { calculatedTotalAmount } = validateCartAndSplitItem(items, cartItems);
+  const totalAmount = await  getAggregateCartItemsByCartIdService(cart_id);
 
-  const { cartItemSet, cartItemSingle, calculatedTotalAmount } = validateCartAndSplitItem(items, cartItems);
+  // if (calculatedTotalAmount !== total_amount) {
+  //   throw new AppError(
+  //     `Total amount mismatch: expected ${calculatedTotalAmount}, got ${total_amount}`,
+  //     400
+  //   );
+  // }
 
-  if (calculatedTotalAmount !== total_amount) {
-    throw new AppError(
-      `Total amount mismatch: expected ${calculatedTotalAmount}, got ${total_amount}`,
-      400
-    );
-  }
 
-  const order = await createOrderService({
-    user_id,
-    total_amount,
-  });
-
-  const orderItemsData = items.map((item) => ({
-    order_id: order.order_id,
-    product_id: item.product_id,
-    quantity: item.quantity,
-    unit_price: item.unit_price,
-  }));
+  const reservationExpiryMinutes = 15; 
+  const reservationExpiryDate = addMinutesToDate(new Date(), reservationExpiryMinutes);
   
-  const orderItems = await createManyOrderItemService(orderItemsData);
+  // create stock transaction
+  const order = await prisma.$transaction(
+    async (tx) => {
+      // load stock with transaction
+      const itemMap_ids = new Map(cartItems.map(i => [i.product_id, i]));
+      const product_ids = cartItems.map((item) => item.product_id);
+      
+
+      // create order 
+      const orderData = {user_id, total_amount: totalAmount};
+      const order = await createOrderService(tx,orderData);
+      
+      // create order items 
+      const createManyOrderItemPayload = cartItems.map((item) => ({
+          order_id: order.order_id,
+          product_id: item.product_id,
+          quantity: item.quantity,
+          unit_price: item.unit_price,
+      }))
+      await createManyOrderItemService(
+        tx,
+        createManyOrderItemPayload
+      );
+
+      let reservationStocksData: ReservationStockInterface[] = [];
+      let updateReservation: Prisma.Sql[] = [];
+      const stockList = await getAllProductsStockServiceByProductId(tx,product_ids);
+      // reserve stock and create reservation records
+      for (const stock of stockList) {
+        const item = itemMap_ids.get(stock.product_id);
+        const reservationStockData ={
+          stock_id: stock.stock_id,
+          order_id: order.order_id,
+          reserved_qty: item.quantity,
+          expiry_at: reservationExpiryDate,    
+        };
+        updateReservation.push(Prisma.sql`(${stock.stock_id}, ${item.quantity})`);
+        reservationStocksData.push(reservationStockData);
+      //   await updateReservedProductStockService(tx,stock.stock_id,item.quantity); // cant optimize cause cant update reserved qty  in difference
+      }
+      let updateReservationData = updateReservation.join(",");
+
+      const updatedCount =await updateReservationsQueryRawService(tx,updateReservation);
+      await createReservationStocksService(tx,reservationStocksData);
+      if (updatedCount !== stockList.length){
+        throw new AppError('Insufficient stock to reserve items', 400);
+      }
+      return order;
+  }
+  );
+
 
   // check redis stock for each item
-  await reserveStockQueue.add(
-    "reserve-stock",
+  await stripePaymentQueue.add(
+    "stripe-payment",
     {
-      cart_id: cart_id,
       order_id: order.order_id,
-      total_amount: calculatedTotalAmount,
+      total_amount: totalAmount,
     },
     {
       attempts: 3,
@@ -61,12 +112,5 @@ const checkoutService = async (data: {
 
 
 
-const getCartNormalizedService = async (cart_id: string) => {
-  const cartItems = await checkoutRepository.getCartAggregatedItems(cart_id);
-  return cartItems;
-};
-const getOrderNormalizedService = async (order_id: string)=>{
-  const orderItems = await checkoutRepository.getOrderAggregatedItems(order_id);
-  return orderItems;
-}
-export { checkoutService, getCartNormalizedService, getOrderNormalizedService };
+
+export { checkoutService };

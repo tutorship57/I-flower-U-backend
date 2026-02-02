@@ -1,7 +1,8 @@
 import orderRepository from "../repository/order.repository";
 import { OrderStatusEnum } from "../../../shared/types/enum/order/orderStatus";
-const createOrderService = async (data: { user_id: string; total_amount: number;order_status?: OrderStatusEnum}) => {
-    const newOrder = await orderRepository.createOrder(data);
+import { Prisma } from "@prisma/client";
+const createOrderService = async (tx:Prisma.TransactionClient,data: { user_id: string; total_amount: number;order_status?: OrderStatusEnum}) => {
+    const newOrder = await orderRepository.createOrder(tx, data);
     return newOrder;
 }       
 
@@ -17,8 +18,8 @@ const getAllOrdersService = async () => {
     return orders;
 }
 
-const updateOrderStatusService = async (order_id: string, order_status: OrderStatusEnum) => {
-    const updatedOrder = await orderRepository.updateOrderStatus(order_id, order_status);
+const updateOrderStatusService = async (tx:Prisma.TransactionClient, order_id: string, order_status: OrderStatusEnum) => {
+    const updatedOrder = await orderRepository.updateOrderStatus(tx,order_id, order_status);
     if(!updatedOrder){
         throw new Error("Order not found");
     }

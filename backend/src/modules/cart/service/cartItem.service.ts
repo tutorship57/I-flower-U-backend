@@ -6,12 +6,18 @@ const getCartItemsByCartIdService = async (cart_id: string) => {
     return cartItems;
 }
 
-const createCartItemService = async (data: {cart_id: string; product_id: string; quantity: number; unit_price: number;}) => {
-    const existingCartItem = await cartItemRepository.findCartItemByCartAndProduct(data.cart_id, data.product_id);
+const getAggregateCartItemsByCartIdService = async (cart_id: string) => {
+    const cartItemsAggregate = await cartItemRepository.getCartItemsSumByCartId(cart_id);
+    return cartItemsAggregate;
+}
+
+const createCartItemService = async (cart_id: string, data: { product_id: string; quantity: number; unit_price: number;}) => {
+    const existingCartItem = await cartItemRepository.findCartItemByCartAndProduct(cart_id, data.product_id);
+    const createData = { cart_id, ...data };
     if (existingCartItem) {
         throw new AppError('Product already in cart', 400);
     }
-    const newCartItem = await cartItemRepository.createCartItem(data);
+    const newCartItem = await cartItemRepository.createCartItem(createData);
     return newCartItem;
 }
 
@@ -36,4 +42,4 @@ const deleteCartManyItemsService = async (cart_id: string, product_ids: string[]
     return await cartItemRepository.deleteManyCartItems(cart_id, product_ids);
 }
 
-export {getCartItemsByCartIdService, createCartItemService, updateCartItemService, deleteCartItemService, deleteCartManyItemsService};
+export {getCartItemsByCartIdService, getAggregateCartItemsByCartIdService, createCartItemService, updateCartItemService, deleteCartItemService, deleteCartManyItemsService};

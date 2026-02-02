@@ -4,14 +4,14 @@ import { AppError } from "../../../shared/utils/appErrorCustomize.util";
 import { findUserByEmailService ,createUserService} from "../../user/service/user.service";
 import {createCartService} from "../../cart/service/cart.service";
 import { getRoleByIdService } from "../../user/service/role.service";
-const loginService = async (email: string, password: string) => {
+const loginService = async (user_email: string,user_password: string) => {
     // Implement login logic here
-    const user = await findUserByEmailService(email);
+    const user = await findUserByEmailService(user_email);
     if (!user) {
         console.log('User not found');
         throw new AppError('Login failed',400);
     }
-    const isPasswordValid = await verifyPassword(user.user_password , password);
+    const isPasswordValid = await verifyPassword(user.user_password , user_password);
     if (!isPasswordValid) {
         console.log('Invalid password');
         throw new AppError('Login failed',400);

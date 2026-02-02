@@ -1,4 +1,5 @@
 import orderItemRepository from "../repository/orderItem.repository";
+import { Prisma } from "@prisma/client";
 
 const getOrderItemByIdService = async (item_id: string) => {
     const orderItem = await orderItemRepository.getOrderItemById(item_id);
@@ -14,8 +15,8 @@ const createOrderItemService = async (data: {order_id: string; product_id: strin
     const newOrderItem = await orderItemRepository.createOrderItem(data);
     return newOrderItem;
 }
-const createManyOrderItemService = async (data: {order_id: string; product_id: string; quantity: number; unit_price: number;}[]) => {
-    const newOrderItems = await orderItemRepository.createOrderItems(data);
+const createManyOrderItemService = async (tx: Prisma.TransactionClient,data: {order_id: string; product_id: string; quantity: number; unit_price: number;}[]) => {
+    const newOrderItems = await orderItemRepository.createOrderItems(tx,data);
     return newOrderItems;
 }
 

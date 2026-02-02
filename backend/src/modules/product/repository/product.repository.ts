@@ -2,10 +2,9 @@ import prisma from "../../../shared/prisma/prismaClient";
 
 interface Product {
   product_name: string;
+  product_description?: string;
   category_id: number;
   product_price: number;
-  product_stock: number;
-  product_description?: string;
   shop_id: string;
 }
 
@@ -16,7 +15,6 @@ const productRepository = {
         product_id: true,
         product_name: true,
         product_price: true,
-        product_stock: true,
         product_description: true,
         category: {
           select: {
@@ -43,6 +41,13 @@ const productRepository = {
             },
           },
         },
+        productStocks:{
+          select: {
+            stock_id:true,
+            stock_qty:true,
+            reserved_qty:true,
+          }
+        }
       },
     });
   },
@@ -53,7 +58,6 @@ const productRepository = {
         product_id: true,
         product_name: true,
         product_price: true,
-        product_stock: true,
         product_description: true,
         category: {
           select: {
@@ -80,6 +84,13 @@ const productRepository = {
             },
           },
         },
+        productStocks:{
+          select: {
+            stock_id:true,
+            stock_qty:true,
+            reserved_qty:true,
+          }
+        }
       },
     });
   },
@@ -107,6 +118,13 @@ const productRepository = {
             TagEvent: true,
           },
         },
+        productStocks:{
+          select: {
+            stock_id:true,
+            stock_qty:true,
+            reserved_qty:true,
+          }
+        }
       },
     });
   },
@@ -119,7 +137,6 @@ const productRepository = {
         product_id: true,
         product_name: true,
         product_price: true,
-        product_stock: true,
         product_description: true,
         productImage: {
           take: 1,
@@ -127,6 +144,13 @@ const productRepository = {
             image_url: true,
           },
         },
+        productStocks:{
+          select: {
+            stock_id:true,
+            stock_qty:true,
+            reserved_qty:true,
+          }
+        }
       },
     });
   },
@@ -168,38 +192,6 @@ const productRepository = {
     return await prisma.product.update({
       where: { product_id },
       data,
-    });
-  },
-  
-  decreaseStockTransaction: async (
-    items: { product_id: string; quantity: number }[]
-  ) => {
-    return await prisma.$transaction(async (tx) => {
-      for (const item of items) {
-        const p = await tx.product.findUnique({
-          where: { product_id: item.product_id },
-        });
-        if (!p) throw new Error(`Product ${item.product_id} not found`);
-        if (p.product_stock < item.quantity)
-          throw new Error(`Not enough stock for ${item.product_id}`);
-
-        await tx.product.update({
-          where: { product_id: item.product_id },
-          data: { product_stock: { decrement: item.quantity } },
-        });
-      }
-    });
-  },
-  increaseStockTransaction: async (
-    items: { product_id: string; quantity: number }[]
-  ) => {
-    return await prisma.$transaction(async (tx) => {
-      for (const item of items) {
-        await tx.product.update({
-          where: { product_id: item.product_id },
-          data: { product_stock: { increment: item.quantity } },
-        });
-      }
     });
   },
   deleteProduct: async (product_id: string) => {

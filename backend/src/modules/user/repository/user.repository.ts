@@ -10,6 +10,22 @@ const userRepository = {
             where: {user_id},
         });
     },
+    getUserProfile: async (user_id: string) => {
+        return await prisma.user.findUnique({
+               select:{
+                user_id: true,
+                user_name: true,
+                user_email: true,
+                role:{
+                    select:{
+                        role_id: true,
+                        role_name: true,
+                    }
+                }
+            },
+            where: {user_id},
+        });
+    },
     findUserByEmail: async (user_email: string) => {
         return await prisma.user.findUnique({
             where: {user_email},
