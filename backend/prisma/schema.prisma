@@ -75,12 +75,14 @@ model Product {
   product_price      Float
   shop_id       String
   category_id     Int
+  type_id       Int?
   category        Category? @relation(fields: [category_id], references: [category_id])
   productColor ProductColor[]
   cartItems        CartItem[] 
   productImage ProductImage[]
   productTagEvent ProductTagEvent[]
   orderItems      OrderItem[]
+  productType   FlowerType? @relation(fields:[type_id],references: [type_id])
   shop          Shop    @relation(fields: [shop_id], references: [shop_id])
   setsAsSet   ProductSet[] @relation("setProducts")
   setsAsItem  ProductSet[] @relation("singleItem")
@@ -154,7 +156,6 @@ enum StockReason {
   ADJUSTMENT
   DAMAGED
 }
-
 model ProductSet{
   set_id    String  // FK  Product.product_id (SET)
   item_id   String  // FK  Product.product_id (SINGLE)
@@ -218,6 +219,7 @@ model FlowerType {
   type_name        String    @unique
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
+  products      Product[]
 }
 model TagEvent{
   tag_id      Int       @id @default(autoincrement())
@@ -285,7 +287,7 @@ model OrderItem {
 // Payment Modules
 model Payment {
   payment_id      String       @id @default(cuid())
-  order_id        String  @unique
+  order_id        String  
   session_id      String  @unique  
   paytype_id      Int? 
   payment_url   String?

@@ -17,4 +17,6 @@ export const seedRole = async (prisma: Prisma.TransactionClient) => {
     data: roleMockUp,
     skipDuplicates: true,
     });
+    const role = await prisma.role.findMany({});
+    console.log("thisisrole",role);
 }
