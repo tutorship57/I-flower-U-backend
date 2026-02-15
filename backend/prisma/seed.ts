@@ -10,6 +10,7 @@ import { seedProducts } from "./seeds/product.seed";
 import { seedProductsImages } from "./seeds/productImage.seed";
 import { seedProductTagEvent } from "./seeds/productTagEvent.seed";
 import { seedProductsStock } from "./seeds/productStock.seed";
+import { seedPaymentType } from "./seeds/paymentType.seed";
 
 async function main() {
     await prisma.$transaction(async (tx) => {
@@ -24,6 +25,7 @@ async function main() {
     await seedProductsImages(tx)
     await seedProductTagEvent(tx)
     await seedProductsStock(tx)
+    await seedPaymentType(tx)
     });
   console.log({
     message: "Database seeded successfully",

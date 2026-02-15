@@ -54,7 +54,6 @@ model Cart {
   @@index([user_id])
 }
 model CartItem {
-  cart_item_id String @id @default(cuid())
   cart_id      String
   product_id   String
   quantity     Int     @default(1)
@@ -64,6 +63,8 @@ model CartItem {
   cart         Cart    @relation(fields: [cart_id], references: [cart_id], onDelete: Cascade)
   product      Product @relation(fields: [product_id], references: [product_id])
   @@index([cart_id])
+  @@index([product_id])
+  @@id([cart_id,product_id])
 }
 // Product Modules
 
@@ -298,7 +299,7 @@ model Payment {
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt  
   @@index([order_id])
-} 
+}
 enum PaymentStatus {
   PENDING
   COMPLETED
