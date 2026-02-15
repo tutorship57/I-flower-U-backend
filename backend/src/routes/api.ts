@@ -14,6 +14,7 @@ import shopRouter from '../modules/shop/routes/shop.route';
 import tagEventRouter from '../modules/product/routes/tagEvent.route';
 import stockRouter from '../modules/stock/routes/product-stock.route';
 import paymentTypeRouter from '../modules/payment/routes/paymentType.route'
+import paymentRouter from '../modules/payment/routes/payment.route'
 //order route เหลือ
 const router = Router();
 
@@ -26,6 +27,7 @@ router.use('/stock', stockRouter);
 router.use('/checkout', checkoutRouter);
 router.use('/recommendation', recommendationRouter);
 router.use('/user', userRouter); 
+router.use('/payment',paymentRouter)
 // admin routes
 router.use('/category', categoryRouter);
 router.use('/color', colorRouter);
