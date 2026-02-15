@@ -31,7 +31,7 @@ export const stripePaymentWorker = new Worker(
         ui_mode: "hosted",
         mode: "payment",
         payment_method_types: ["card"],
-        success_url: `${FRONTEND_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${FRONTEND_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${FRONTEND_URL}/checkout/cancel`,
         metadata: {
         order_id: order_id, // เก็บไว้สำหรับ webhook
