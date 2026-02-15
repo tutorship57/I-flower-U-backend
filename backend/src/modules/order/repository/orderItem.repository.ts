@@ -8,6 +8,11 @@ const orderItemRepository = {
             where: {item_id},
         });
     },
+    getOrderItems: async (queryFilter:{order_id?: string, product_id?: string}) => {
+        return await prisma.orderItem.findMany({
+            where: queryFilter,
+        });
+    },
     getOrderItemsByOrderId: async (order_id: string) => {
         return await prisma.orderItem.findMany({
             where: {order_id},

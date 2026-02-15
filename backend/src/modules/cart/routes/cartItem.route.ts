@@ -1,14 +1,16 @@
-import {getCartItemsByCartId, createCartItem, updateCartItem, deleteCartItem, getAggregateCartItem} from "../controller/cartItem.controller";
+import {getCartItemsByCartIdController, createCartItemController, updateCartItemController, updateCartItemQuantityController,deleteCartItemController,getAggregateCartItemController, deleteAllCartItemsController} from "../controller/cartItem.controller";
 import { Router } from "express";
 
 const router = Router({
     mergeParams: true,
 });
 
-router.get('/', getCartItemsByCartId);
-router.get('/aggregate', getAggregateCartItem);
-router.post('/', createCartItem);
-router.put('/:cart_item_id', updateCartItem);
-router.delete('/:cart_item_id', deleteCartItem);
+router.get('/', getCartItemsByCartIdController);
+router.get('/aggregate', getAggregateCartItemController);
+router.post('/', createCartItemController);
+router.put('/:product_id', updateCartItemController);
+router.patch('/:product_id', updateCartItemQuantityController);
+router.delete('/:product_id', deleteCartItemController);
+router.delete('/',deleteAllCartItemsController)
 
 export default router;

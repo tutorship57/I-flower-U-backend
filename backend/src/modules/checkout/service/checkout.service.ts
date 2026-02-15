@@ -3,12 +3,9 @@ import { Prisma } from "@prisma/client";
 import { createOrderService,} from "../../order/service/order.service";
 import { getCartItemsByCartIdService } from "../../cart/service/cartItem.service";
 import { AppError } from "../../../shared/utils/appErrorCustomize.util";
-import { validateCartAndSplitItem } from "../helper/checkout.helper";
 import { createManyOrderItemService } from "../../order/service/orderItem.service";
 import { stripePaymentQueue } from "../../../shared/bullMQ/payment/payment.queue";
 import { addMinutesToDate } from "../../../shared/utils/converse-time.util";
-import { TransactionStockEnum } from "../../../shared/types/enum/stock/transaction-stock.enum";
-import { CreateTransactionStockInterface } from "../../../shared/types/interface/stock/transaction-stock.interface";
 import { getAllProductsStockServiceByProductId, updateReservationsQueryRawService } from "../../stock/service/product-stock.service";
 import { createReservationStocksService} from "../../stock/service/reservation-stock.service";
 import { ReservationStockInterface } from "../../../shared/types/interface/stock/reservation-stock.interface";
@@ -49,7 +46,6 @@ const checkoutService = async (data: {
       // create order 
       const orderData = {user_id, total_amount: totalAmount};
       const order = await createOrderService(tx,orderData);
-      
       // create order items 
       const createManyOrderItemPayload = cartItems.map((item) => ({
           order_id: order.order_id,
@@ -107,7 +103,7 @@ const checkoutService = async (data: {
       removeOnFail: 20,
     }
   );
-  return order.order_id;
+  return order;
 };
 
 

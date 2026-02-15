@@ -15,6 +15,7 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 
 const register = asyncHandler(async (req: Request, res: Response) => {
     const {user_name,user_email,user_password} = req.body;
+    console.log("this is register",req.body);
     const newUser = await registerService(user_name, user_email, user_password);
     return res.status(201).json({message: 'Registration successful',data: newUser});
 });

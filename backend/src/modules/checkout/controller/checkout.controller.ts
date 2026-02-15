@@ -4,9 +4,9 @@ import { checkoutService } from "../service/checkout.service";
 
 const checkoutController =  asyncHandler(async (req, res, next) => {
     const {user_id, total_amount, items, cart_id} = req.body;
-    const order_id = await checkoutService({user_id, cart_id});
+    const order = await checkoutService({user_id, cart_id});
     res.status(200).json({
-        data: order_id,
+        data: order,
     });
 });
 export {checkoutController};

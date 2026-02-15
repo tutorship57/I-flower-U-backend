@@ -6,6 +6,18 @@ const createPaymentService = async (data: { order_id: string; session_id: string
     return newPayment;
 }
 
+
+const getPaymentsService = async (filters: { order_id?: string; session_id?: string; paytype_id?: number})=>{
+    if(filters?.session_id){
+        const payment = await paymentRepository.getPaymentBySessionId(filters.session_id);
+        if(!payment){
+            throw new Error("No payments found for this session");
+        }
+        return payment;
+    }
+    const payments = await paymentRepository.getPayments(filters);
+    return payments;
+}
 const getPaymentByIdService = async (payment_id: string) => {
     const payment = await paymentRepository.getPaymentById(payment_id);
     if(!payment){
@@ -51,4 +63,4 @@ const deletePaymentService = async (payment_id: string) => {
     return deletedPayment;
 }
 
-export { createPaymentService, getPaymentByIdService,updatePaymentService, updatePaymentStatusService, deletePaymentService, getPaymentByOrderIdService, getPaymentBySessionIdService };
+export { createPaymentService, getPaymentByIdService,updatePaymentService,getPaymentsService ,updatePaymentStatusService, deletePaymentService, getPaymentByOrderIdService, getPaymentBySessionIdService };

@@ -1,9 +1,9 @@
 import prisma from "../../../shared/prisma/prismaClient";
 
 const cartItemRepository = {
-    getCartItemById: async (cart_item_id: string) => {
+    getCartItemById: async (cart_id: string,product_id: string) => {
         return await prisma.cartItem.findUnique({
-            where: {cart_item_id},
+            where: {cart_id_product_id:{cart_id,product_id}},
         });
     },
     getCartItemsSumByCartId: async (cart_id: string) => {
@@ -34,15 +34,34 @@ const cartItemRepository = {
             data,
         });
     },
-    updateCartItem: async (cart_item_id: string, data: {quantity?: number;unit_price?: number;}) => {
+    updateCartItem: async (cart_id: string, product_id: string,data: {quantity?: number;unit_price?: number;}) => {
         return await prisma.cartItem.update({
-            where: {cart_item_id},
+            where: {cart_id_product_id:{
+               product_id,
+               cart_id
+           }},
             data,
         });
     },
-    deleteCartItem: async (cart_item_id: string) => {
+    updateCartItemQuantity: async (cart_id: string,product_id: string,quantity: number) => {
+       return await prisma.cartItem.update({
+           where: {cart_id_product_id:{
+               product_id,
+               cart_id
+           }},
+           data: {
+               quantity:{
+                   increment: quantity
+               }
+           }
+       }) 
+    },
+    deleteCartItem: async (cart_id: string,product_id: string) => {
         return await prisma.cartItem.delete({
-            where: {cart_item_id},
+           where: {cart_id_product_id:{
+               product_id,
+               cart_id
+           }}
         });
     },
     deleteManyCartItems: async (cart_id: string, product_ids: string[]) => {
@@ -50,6 +69,13 @@ const cartItemRepository = {
             where: {
                 cart_id,
                 product_id:{in: product_ids},
+            },
+        });
+    },
+    deleteAllCartItems: async (cart_id: string) => {
+        return await prisma.cartItem.deleteMany({
+            where: {
+                cart_id,
             },
         });
     }

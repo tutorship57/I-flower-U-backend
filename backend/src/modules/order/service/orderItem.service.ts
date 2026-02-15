@@ -6,6 +6,12 @@ const getOrderItemByIdService = async (item_id: string) => {
     return orderItem;
 }
 
+const getOrderItemsService = async (queryFilter:{order_id?: string, product_id?: string}) => {
+    if(queryFilter.order_id){
+        return await orderItemRepository.getOrderItemsByOrderId(queryFilter.order_id);
+    }
+    return await orderItemRepository.getOrderItems(queryFilter);
+}
 const getOrderItemsByOrderIdService = async (order_id: string) => {
     const orderItems = await orderItemRepository.getOrderItemsByOrderId(order_id);
     return orderItems;
@@ -29,4 +35,4 @@ const deleteOrderItemService = async (item_id: string) => {
     return await orderItemRepository.deleteOrderItem(item_id);
 }   
 
-export { getOrderItemByIdService, getOrderItemsByOrderIdService, createOrderItemService, updateOrderItemService, deleteOrderItemService, createManyOrderItemService };
+export { getOrderItemByIdService, getOrderItemsService,getOrderItemsByOrderIdService, createOrderItemService, updateOrderItemService, deleteOrderItemService, createManyOrderItemService };

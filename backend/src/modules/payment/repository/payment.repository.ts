@@ -10,6 +10,11 @@ const mapPaymentStatusToPrisma = (
 };
 
 const paymentRepository = {
+    getPayments: async (filters: { order_id?: string; session_id?: string; paytype_id?: number}) => {
+        return await prisma.payment.findMany({
+            where: filters,
+        });
+    },
     createPayment: async (data: { order_id: string; session_id: string; paytype_id: number; amount:number,payment_url:string}) => {
         return await prisma.payment.create({
             data: {
@@ -23,6 +28,18 @@ const paymentRepository = {
     },
     getPaymentById: async (payment_id: string) => {
         return await prisma.payment.findUnique({
+            select:{
+                payment_id: true,
+                order_id: true,
+                session_id:true,
+                amount: true,
+                PayType:{
+                    select: {
+                        paytype_id: true,
+                        paytype_name: true,
+                    }
+                }
+            },
             where: { payment_id },
         });
     },
@@ -33,6 +50,18 @@ const paymentRepository = {
     },
     getPaymentBySessionId: async (session_id: string) => {
         return await prisma.payment.findUnique({
+            select: {
+                payment_id: true,
+                session_id: true,
+                amount: true,
+                order_id: true,
+                PayType: {
+                    select: {
+                        paytype_id: true,
+                        paytype_name: true,
+                    },
+                },
+            },
             where: { session_id },
         });
     },  

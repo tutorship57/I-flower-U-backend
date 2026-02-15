@@ -22,8 +22,14 @@ const loginService = async (user_email: string,user_password: string) => {
         console.log('User role not found');
         throw new AppError('Login failed',400);
     }
+
+    const userInfo = {
+        user_id: user.user_id,
+        user_email: user.user_email,
+        user_role: role.role_name,
+    };
     
-    return {...user, user_role:role.role_name};
+    return {...userInfo, user_role:role.role_name};
 }
 
 const registerService = async (username: string, email: string, password: string) => {

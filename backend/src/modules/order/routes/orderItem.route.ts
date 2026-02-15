@@ -1,7 +1,9 @@
-import { getOrderItemsByOrderId, createOrderItem, updateOrderItem, deleteOrderItem } from "../controller/orderItem.controlller";
+import { getOrderItemsByOrderId,getOrderItemsController, createOrderItem, updateOrderItem, deleteOrderItem } from "../controller/orderItem.controller";
 import { Router } from "express";
 
-const router = Router();
+const router = Router({
+    mergeParams: true
+});
 
 router.get('/', getOrderItemsByOrderId);
 router.post('/', createOrderItem);

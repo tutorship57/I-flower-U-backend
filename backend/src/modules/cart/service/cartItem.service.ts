@@ -21,25 +21,33 @@ const createCartItemService = async (cart_id: string, data: { product_id: string
     return newCartItem;
 }
 
-const updateCartItemService = async (cart_item_id: string, data: {quantity?: number;}) => {
-    const existingCartItem = await cartItemRepository.getCartItemsByCartId(cart_item_id);
+const updateCartItemService = async (cart_id: string,product_id: string, data: {quantity?: number;}) => {
+    const existingCartItem = await cartItemRepository.getCartItemsByCartId(cart_id);
     if (!existingCartItem) {
         throw new AppError('Cart Item not found', 404);
     }
-    return await cartItemRepository.updateCartItem(cart_item_id, data);
+    return await cartItemRepository.updateCartItem(cart_id,product_id, data);
 }
 
-const deleteCartItemService = async (cart_item_id: string) => {
-    const existingCartItem = await cartItemRepository.getCartItemById(cart_item_id);
+const updateCartItemQuantityService = async (cart_id: string,product_id: string, quantity: number) => {
+    const existingCartItem = await cartItemRepository.getCartItemsByCartId(product_id);
     if (!existingCartItem) {
         throw new AppError('Cart Item not found', 404);
     }
-    return await cartItemRepository.deleteCartItem(cart_item_id);
+    return await cartItemRepository.updateCartItemQuantity(cart_id,product_id, quantity);
 }
 
-const deleteCartManyItemsService = async (cart_id: string, product_ids: string[]) => {
+const deleteCartItemService = async (cart_id: string,product_id: string) => {
+    const existingCartItem = await cartItemRepository.getCartItemById(cart_id,product_id);
+    if (!existingCartItem) {
+        throw new AppError('Cart Item not found', 404);
+    }
+    return await cartItemRepository.deleteCartItem(cart_id,product_id);
+}
+
+const deleteAllCartItemsService = async (cart_id: string) => {
     
-    return await cartItemRepository.deleteManyCartItems(cart_id, product_ids);
+    return await cartItemRepository.deleteAllCartItems(cart_id);
 }
 
-export {getCartItemsByCartIdService, getAggregateCartItemsByCartIdService, createCartItemService, updateCartItemService, deleteCartItemService, deleteCartManyItemsService};
+export {getCartItemsByCartIdService, updateCartItemQuantityService,getAggregateCartItemsByCartIdService, createCartItemService, updateCartItemService, deleteCartItemService, deleteAllCartItemsService};

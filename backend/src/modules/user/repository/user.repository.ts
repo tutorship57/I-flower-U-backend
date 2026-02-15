@@ -7,6 +7,17 @@ const userRepository = {
     },
     findUserById: async (user_id: string) => {
         return await prisma.user.findUnique({
+            select: {
+                user_id: true,
+                user_name: true,
+                user_email: true,
+                role: {
+                    select: {
+                        role_id: true,
+                        role_name: true,
+                    },
+                },
+            },
             where: {user_id},
         });
     },
@@ -21,7 +32,12 @@ const userRepository = {
                         role_id: true,
                         role_name: true,
                     }
-                }
+                },
+                carts:{
+                    select:{
+                        cart_id: true,
+                        },
+                    }
             },
             where: {user_id},
         });
