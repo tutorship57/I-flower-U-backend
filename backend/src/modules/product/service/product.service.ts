@@ -6,6 +6,10 @@ const getProductByIdService = async (product_id: string) => {
     const product = await productRepo.findProductById(product_id);
     return product;
 };
+const getProductOwnerShipService = async(product_id: string) => {
+    const product = await productRepo.findOwnerShip(product_id);
+    return product;
+}
 const getAllProductService = async () => {
     const products = await productRepo.getAllProduct();
     return products;
@@ -47,4 +51,4 @@ const deleteProductService = async (product_id: string) => {
     return {...deletedProduct, images: images};
 }
 
-export {getProductByIdService,getProductByIdsService,createManyProductService,getAllProductByShopIDService, getAllProductService, getProductsByCategoryService, createProductService, updateProductService, deleteProductService};
+export {getProductByIdService,getProductOwnerShipService,getProductByIdsService,createManyProductService,getAllProductByShopIDService, getAllProductService, getProductsByCategoryService, createProductService, updateProductService, deleteProductService};

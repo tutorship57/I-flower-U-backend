@@ -1,8 +1,11 @@
 import {Router} from "express";
 import {getPaymentByOrderIdController,getPaymentsController} from "../controller/payment.controller";
+import { sessionAuth } from "../../../shared/guards/session.guard";
+import { requireRole } from "../../../shared/guards/role.guard";
+import { resourceOwnershipGuard } from "../../../shared/guards/ownership.guard";
 const router = Router();
 
-router.get("/",getPaymentsController);
-router.get("/:order_id",getPaymentByOrderIdController);
+router.get("/",sessionAuth,requireRole('user','admin'),resourceOwnershipGuard,getPaymentsController);
+router.get("/:order_id",sessionAuth,requireRole('user','admin'),resourceOwnershipGuard,getPaymentByOrderIdController);
 
 export default router;

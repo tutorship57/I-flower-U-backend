@@ -90,9 +90,32 @@ const productRepository = {
             stock_qty:true,
             reserved_qty:true,
           }
+        },
+        shop:{
+          select: {
+            shop_name: true,
+            shop_address: true,
+            shop_phone: true,
+            shop_open: true,
+            shop_close: true,
+            user_id: true
+          }
+
         }
       },
     });
+  },
+  findOwnerShip: async (product_id:string ) =>{
+    return await prisma.product.findUnique({
+      where : {product_id},
+      select:{
+        shop: {
+          select: {
+            user_id: true
+          }
+        }
+      }
+    })
   },
   findProductsByShopID: async (shop_id: string) => {
     return await prisma.product.findMany({
