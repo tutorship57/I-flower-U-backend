@@ -5,7 +5,6 @@ import { requireRole } from "../../../shared/guards/role.guard";
 import { userResourceOwnershipGuard} from "../../../shared/guards/ownership.guard";
 const router = Router();
 
-router.get("/",sessionAuth,requireRole('user','admin'),userResourceOwnershipGuard,getPaymentsController);
-router.get("/:order_id",sessionAuth,requireRole('user','admin'),userResourceOwnershipGuard,getPaymentByOrderIdController);
-
+router.get("/",sessionAuth,requireRole('user','admin'),getPaymentsController);
+router.get("/:order_id",sessionAuth,requireRole('user','admin'),getPaymentByOrderIdController);
 export default router;
