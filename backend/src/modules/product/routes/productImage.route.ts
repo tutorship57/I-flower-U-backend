@@ -1,7 +1,7 @@
 import {Router } from "express";
 import { createMultipleProductImage,createMocksProductImage, getImagesByProductId, updateProductImage, deleteProductImage} from "../controller/productImage.controller";
 import { upload } from "../../../shared/middleware/multer.Middleware";
-import { productResourceOwnershipGuard, resourceOwnershipGuard } from "../../../shared/guards/ownership.guard";
+import { productResourceOwnershipGuard, userResourceOwnershipGuard } from "../../../shared/guards/ownership.guard";
 import { sessionAuth } from "../../../shared/guards/session.guard";
 import { requireRole } from "../../../shared/guards/role.guard";
 const router = Router({

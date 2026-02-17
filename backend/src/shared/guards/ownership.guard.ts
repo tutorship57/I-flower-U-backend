@@ -3,7 +3,7 @@ import { AppError } from '../utils/appErrorCustomize.util';
 import { getProductOwnerShipService } from '../../modules/product/service/product.service';
 
 
-export const resourceOwnershipGuard = () => {
+export const userResourceOwnershipGuard = () => {
   return (req: Request, res: Response, next: NextFunction) => {
 
 

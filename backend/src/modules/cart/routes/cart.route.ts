@@ -3,13 +3,13 @@ import { Router } from "express";
 import cartItemRouter from './cartItem.route'
 import { sessionAuth } from "../../../shared/guards/session.guard";
 import { requireRole } from "../../../shared/guards/role.guard";
-import { resourceOwnershipGuard } from "../../../shared/guards/ownership.guard";
+import { userResourceOwnershipGuard } from "../../../shared/guards/ownership.guard";
 const router = Router();
 
-router.get('/:user_id',sessionAuth,requireRole('user'),resourceOwnershipGuard,getCartByUserId);
+router.get('/:user_id',sessionAuth,requireRole('user'),userResourceOwnershipGuard,getCartByUserId);
 router.post('/', createCart);
 // router.delete('/:user_id',sessionAuth,requireRole('user'),ownershipGuard,deleteCart);
-router.use('/:cart_id/cart-item',sessionAuth,requireRole('user'),resourceOwnershipGuard,cartItemRouter);
+router.use('/:cart_id/cart-item',sessionAuth,requireRole('user'),userResourceOwnershipGuard,cartItemRouter);
 
 
 export default router;
