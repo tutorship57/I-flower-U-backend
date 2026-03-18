@@ -9,10 +9,8 @@ import { sessionMiddleware } from './shared/middleware/session.Middleware';
 import { corsMiddleware } from './shared/middleware/cors.Middleware';
 import { stripeRouter } from './modules/webhook/route/stripe.route';
 import apiRouter from './routes/api';
-import cors from 'cors';
 
 const app = express();
-  
 
 app.use(cookieParser());
 app.use(corsMiddleware)
