@@ -3,11 +3,9 @@ import "dotenv/config";
 import { redisConnection } from "../../redis/redis.connection";
 import {
   createPaymentService,
-  updatePaymentStatusService,
 } from "../../../modules/payment/service/payment.service";
 import { stripe } from "../../stripe/stripe.service";
 import prisma from "../../prisma/prismaClient";
-import { PaymentStatusEnum } from "../../types/enum/payment/paymentStatus";
 import {OrderStatusEnum} from "../../types/enum/order/orderStatus"
 import { getOrderItemsByOrderIdService } from "../../../modules/order/service/orderItem.service";
 import { getOrderByIdService, updateOrderStatusService } from "../../../modules/order/service/order.service";

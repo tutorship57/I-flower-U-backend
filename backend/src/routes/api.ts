@@ -39,7 +39,6 @@ router.use('/payment-type',paymentTypeRouter)
 router.use('/shop', shopRouter); // Shop routes to be added here
 //health check route
 router.use('/health', (req, res) => {
-    console.log('this is session:', req.session);
     res.status(200).send('API is healthy');
 });
 
