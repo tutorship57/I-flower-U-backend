@@ -1,41 +1,88 @@
 services:
+  # backend-api:
+  #   image: ifloweru-backend
+  #   container_name: ifloweru_backend
+
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - 3000:3000
+  #   restart: unless-stopped
+  #   command: > 
+  #     sh -c "npx prisma migrate deploy && npx prisma db seed && node dist/index.js"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  # backend-worker:
+  #   image: ifloweru-backend
+  #   container_name: ifloweru_worker
+  #   env_file:
+  #     - .env
+  #   restart: unless-stopped
+  #   command: > 
+  #     sh -c "node dist/shared/bullMQ/payment/payment.worker.js"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy # Changed from service_started for better reliability
   postgres:
     image: postgres:16
     container_name: ifloweru_postgres
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-    ports:
-      - "5444:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5444:5432"
+    healthcheck:
+      # pg_isready is the standard way to check if Postgres is accepting connections
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7
+    container_name: ifloweru_redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      # Checks if Redis responds with PONG
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   pgadmin:
     image: dpage/pgadmin4
     container_name: ifloweru_pgadmin
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
       - "5050:80"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     volumes:
       - pgadmin_data:/var/lib/pgadmin
 
-  redis:
-    image: redis:7
-    container_name: ifloweru_redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-
 volumes:
   postgres_data:
-  pgadmin_data:
+  # pgadmin_data:
   redis_data:
+  pgadmin_data:
