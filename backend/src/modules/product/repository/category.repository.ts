@@ -8,7 +8,6 @@ const productCategoryRepository = {
             where: {category_id},
         });
     },
-    
     getAll: async () => {
         return await prisma.category.findMany();
     },

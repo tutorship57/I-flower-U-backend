@@ -28,8 +28,8 @@ const updateCategory = asyncHandler( async (req: Request, res: Response ) => {
 
 const deleteCategory = asyncHandler( async (req: Request, res: Response ) => {
     const { categoryId } = req.params;
-    const deletedCategory = await deleteCategoryService(Number(categoryId));
-    return res.status(200).json({ data: deletedCategory });
+    await deleteCategoryService(Number(categoryId));
+    return res.sendStatus(204);
 });
 
 

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { asyncHandler } from '../../../shared/middleware/asyncHandler.Middleware';
 import { createFlowerTypeService, deleteFlowerTypeService, getAllFlowerTypesService, getFlowerTypeService, updateFlowerTypeService } from '../service/flowerType.service';
 
+
 const getAllFlowerTypes = asyncHandler( async (req: Request, res: Response) => {
     const flowerTypes = await getAllFlowerTypesService();
     res.status(200).json({data: flowerTypes});

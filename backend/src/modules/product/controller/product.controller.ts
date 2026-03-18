@@ -21,6 +21,7 @@ const getAllProduct = asyncHandler( async (req: Request, res: Response) => {
 
 const getAllProductByShopID = asyncHandler( async (req: Request, res: Response) => {
     const shop_id = req.params.shop_id;
+
     const products = await getAllProductByShopIDService(shop_id);
     res.status(200).json({data: products});
 });

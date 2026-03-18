@@ -1,8 +1,17 @@
 import { AppError } from "../../../shared/utils/appErrorCustomize.util";
 import flowerRepository from "../repository/flowerType.repository";
+import { redis } from "../../../shared/redis/redis.service";
+import { bufferCheck } from '../../../shared/utils/cache.util';
 
 const getAllFlowerTypesService = async () => {
+    const cacheKey = "flowerTypes:all";
+    const cacheFlowerTypes = await redis.get(cacheKey);
+    if (cacheFlowerTypes) {
+        const parsedCache = bufferCheck(cacheFlowerTypes);
+        return JSON.parse(parsedCache);
+    }
     const flowerTypes = await flowerRepository.getAllFlowerTypes();
+    await redis.setEx(cacheKey, 300, JSON.stringify(flowerTypes));
     return flowerTypes;
 }
 
@@ -20,11 +29,20 @@ const createFlowerTypeService = async (data: {type_name: string;}) => {
         throw new AppError('Flower Type with this name already exists', 400);
     }
     const newFlowerType = await flowerRepository.createFlowerType(data);
+    const cacheKey = "flowerTypes:all";
+    await redis.del(cacheKey);
     return newFlowerType;
 }
 
 const updateFlowerTypeService = async (type_id: number, data: {type_name?: string;}) => {
-    return await flowerRepository.updateFlowerType(type_id, data);    
+    const existingFlowerType = await flowerRepository.findFlowerTypeById(type_id);
+    if (!existingFlowerType) {
+        throw new AppError('Flower Type not found', 404);
+    }
+    const updatedFlowerType = await flowerRepository.updateFlowerType(type_id, data);
+    const cacheKey = "flowerTypes:all";
+    await redis.del(cacheKey);
+    return updatedFlowerType;
 }
 
 const deleteFlowerTypeService = async (type_id: number) => {
@@ -32,8 +50,9 @@ const deleteFlowerTypeService = async (type_id: number) => {
     if (!existingFlowerType) {
         throw new AppError('Flower Type not found', 404);
     }
-    const deletedFlowerType = await flowerRepository.deleteFlowerType(type_id);
-    return deletedFlowerType;
+    const cacheKey = "flowerTypes:all";
+    await redis.del(cacheKey);
+    await flowerRepository.deleteFlowerType(type_id);
 }
 
 export {getAllFlowerTypesService, getFlowerTypeService, createFlowerTypeService, updateFlowerTypeService, deleteFlowerTypeService}; 
