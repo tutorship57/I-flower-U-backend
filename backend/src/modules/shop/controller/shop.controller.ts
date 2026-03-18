@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createShopService, deleteShopService, getShopByIdService, updateShopService } from "../service/shop.service";
+import { createShopService, deleteShopService, getAllShopService, getShopByIdService, updateShopService } from "../service/shop.service";
 import { createShopDataType, updateShopDataType } from "../type/shop.type";
 
 
@@ -14,6 +14,11 @@ const updateShopController = async (req: Request, res: Response) => {
     const data: updateShopDataType = req.body;
     const updatedShop = await updateShopService(shop_id, data);
     res.status(200).json({data: updatedShop});
+}
+
+const getAllShopController = async(req: Request, res: Response) =>{
+    const shops = await getAllShopService();
+    return res.status(200).json({data:shops})
 }
 
 const getShopByIdController = async (req: Request, res: Response) => {
@@ -33,4 +38,5 @@ export {
     updateShopController,
     getShopByIdController,
     deleteShopController,
+    getAllShopController
 };

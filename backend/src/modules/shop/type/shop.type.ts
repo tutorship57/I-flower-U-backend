@@ -9,6 +9,7 @@ export type createShopDataType = {
 export type updateShopDataType = Partial<createShopDataType>;
 
 export type shopRepositoryType = {
+    getAllShop: ()=> Promise<any>;
     getShopById: (shop_id: string) => Promise<any>;
     createShop: (data: createShopDataType) => Promise<any>;
     updateShop: (shop_id: string, data: updateShopDataType) => Promise<any>;

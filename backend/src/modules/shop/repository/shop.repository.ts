@@ -7,9 +7,21 @@ import { createShopDataType, shopRepositoryType, updateShopDataType } from "../t
 
 
 const shopRepository: shopRepositoryType = {
+    getAllShop: async()=>{
+        return await prisma.shop.findMany();
+    },
     getShopById: async (shop_id: string) => {
         return await prisma.shop.findUnique({
             where: { shop_id },
+            include:{
+                user:{
+                    select:{
+                        user_id:true,
+                        user_name:true,
+                        user_email:true
+                    }
+                }
+            }
         });
     },
     createShop: async (data: createShopDataType) => {

@@ -12,6 +12,10 @@ const getShopByIdService = async (shop_id: string) => {
     return await shopRepository.getShopById(shop_id);
 }
 
+const getAllShopService = async () =>{
+    return await shopRepository.getAllShop();
+}
+
 const deleteShopService = async (shop_id: string) => {
     return await shopRepository.deleteShop(shop_id);
 }
@@ -21,4 +25,5 @@ export {
     updateShopService,
     getShopByIdService,
     deleteShopService,
+    getAllShopService
 };
