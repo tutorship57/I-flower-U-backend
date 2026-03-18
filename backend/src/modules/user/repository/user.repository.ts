@@ -33,6 +33,12 @@ const userRepository = {
                         role_name: true,
                     }
                 },
+                shops:{
+                    select:{
+                        shop_id: true,
+                        shop_name: true
+                    }
+                },
                 carts:{
                     select:{
                         cart_id: true,
