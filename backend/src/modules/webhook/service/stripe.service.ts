@@ -40,6 +40,9 @@ const stripeWebhookService = async (signature: string, Reqbody: Buffer) => {
       throw new AppError(`Payment not found for session ID: ${session.id}`, 404);
     }
 
+    if(payment.payment_status==='COMPLETED'){
+      return
+    }
 
     const order_id = payment.order_id 
     const reserveStocksTransaction = await getReservationStockByOrderIdService(payment.order_id);
@@ -67,15 +70,5 @@ const stripeWebhookService = async (signature: string, Reqbody: Buffer) => {
     });
     console.log("update successfully")
     
-    return { message: "your payment is completed",
-      status: 200,
-      success: true,
-      eventDetail: event,
-      paymentDetail: {
-        payment_id: updatedPayment.payment_id,
-        payment_status: updatedPayment.payment_status,
-        amount: updatedPayment.amount
-      }
-    };
 }
 export { stripeWebhookService };

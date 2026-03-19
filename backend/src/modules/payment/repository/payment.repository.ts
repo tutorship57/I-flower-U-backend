@@ -61,6 +61,7 @@ const paymentRepository = {
                         paytype_name: true,
                     },
                 },
+                payment_status:true
             },
             where: { session_id },
         });

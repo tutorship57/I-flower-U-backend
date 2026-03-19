@@ -9,8 +9,8 @@ const stripeWebhookController = asyncHandler(async (req:Request, res:Response) =
       return res.status(400).send("Missing stripe-signature");
     }
     console.log("Received Stripe webhook:", req.body as Buffer);
-    const event = await stripeWebhookService(sig as string,req.body as Buffer);
-    res.status(200).json({data: event});
+    await stripeWebhookService(sig as string,req.body as Buffer);
+    res.status(200)
 })
 
 
