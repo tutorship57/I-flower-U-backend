@@ -3,7 +3,19 @@ import prisma from '../../../shared/prisma/prismaClient';
 
 const userRepository = {
     findAllUsers: async () => {
-        return await prisma.user.findMany();
+        return await prisma.user.findMany({
+            select: {
+                user_id: true,
+                user_name: true,
+                user_email: true,
+                created_at:true,
+                role: {
+                    select: {
+                        role_name: true,
+                    },
+                },
+            },
+        });
     },
     findUserById: async (user_id: string) => {
         return await prisma.user.findUnique({

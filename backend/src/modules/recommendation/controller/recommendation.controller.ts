@@ -4,6 +4,7 @@ import { Request, Response} from "express";
 
 
 const getFlowerRecommendationController = asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['Recommendation']
     const { userInput } = req.body;
     const clientId = req.headers['x-client-id'] as string;
     const recommendation = await getFlowerRecommendationService(userInput, clientId);
@@ -11,10 +12,10 @@ const getFlowerRecommendationController = asyncHandler(async (req: Request, res:
 });
 
 const getFlowerRecommendationResultController = asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['Recommendation']
     const { jobId } = req.params;
     const getJobResult = await getFlowerRecommendationResultService(jobId);
     return res.status(200).json({ data: getJobResult });
-
 
 })
 

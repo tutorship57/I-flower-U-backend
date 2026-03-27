@@ -1,7 +1,7 @@
 import prisma from "../../../shared/prisma/prismaClient";
 import { Prisma } from "@prisma/client";
 import { createOrderService,} from "../../order/service/order.service";
-import { getCartItemsByCartIdService } from "../../cart/service/cartItem.service";
+import { deleteAllCartItemsService, getCartItemsByCartIdService } from "../../cart/service/cartItem.service";
 import { AppError } from "../../../shared/utils/appErrorCustomize.util";
 import { createManyOrderItemService } from "../../order/service/orderItem.service";
 import { stripePaymentQueue } from "../../../shared/bullMQ/payment/payment.queue";
@@ -21,15 +21,7 @@ const checkoutService = async (data: {
 
   const { user_id,  cart_id } = data;
   const cartItems = await getCartItemsByCartIdService(cart_id);
-  // const { calculatedTotalAmount } = validateCartAndSplitItem(items, cartItems);
   const totalAmount = await  getAggregateCartItemsByCartIdService(cart_id);
-
-  // if (calculatedTotalAmount !== total_amount) {
-  //   throw new AppError(
-  //     `Total amount mismatch: expected ${calculatedTotalAmount}, got ${total_amount}`,
-  //     400
-  //   );
-  // }
 
 
   const reservationExpiryMinutes = 15; 
@@ -84,6 +76,8 @@ const checkoutService = async (data: {
       return order;
   }
   );
+
+  await deleteAllCartItemsService(cart_id)
 
 
   // check redis stock for each item

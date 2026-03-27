@@ -19,7 +19,9 @@ import paymentRouter from '../modules/payment/routes/payment.route'
 const router = Router();
 
 // user routes
+
 router.use('/auth', authRouter);
+
 router.use('/product', productRouter);
 router.use('/order', orderRouter);
 router.use('/cart', cartRouter);

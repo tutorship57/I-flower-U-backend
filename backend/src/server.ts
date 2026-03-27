@@ -4,6 +4,9 @@ import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './shared/swagger/swagger-output.json';
+import { swaggerDocumentConfig } from './shared/middleware/swagger.Middleware';
 import { errorHandler } from './shared/middleware/errorHandler.Middleware';
 import { sessionMiddleware } from './shared/middleware/session.Middleware';
 import { corsMiddleware } from './shared/middleware/cors.Middleware';
@@ -12,15 +15,22 @@ import apiRouter from './routes/api';
 
 const app = express();
 
+
 app.use(cookieParser());
 app.use(corsMiddleware)
 app.use(helmet());
 app.use(morgan('dev'));
+
+// swagger documentation
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+// app.use('/api/docs', swaggerUi.serve,swaggerUi.setup(swaggerDocumentConfig))
 // app.use(corsMiddleware);
 //webhook route
 
 // The express.raw middleware keeps the request body unparsed;
 // this is necessary for the signature verification process
+
+
 
 app.use('/api/stripe', stripeRouter);
 

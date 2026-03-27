@@ -3,18 +3,21 @@ import  { getAllProductColorsService, getProductColorsByProductIdService, getPro
 import { asyncHandler } from "../../../shared/middleware/asyncHandler.Middleware";
 
 const getAllProductColorsByProductId = asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['ProductColor']
     const productColors = await getProductColorsByProductIdService(req.params.product_id);
     return res.status(200).json({data: productColors});
 });
 
 
 const getProductColorById = asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['ProductColor']
     const color_id = Number(req.params.color_id);
     const productColor = await getProductColorByIdService(color_id);
     return res.status(200).json({data: productColor});
 });
 
 const createProductColor = asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['ProductColor']
     const product_id = req.params.product_id;
     const { colors } = req.body;
     const newProductColor = await createProductColorService(product_id, colors);
@@ -22,6 +25,7 @@ const createProductColor = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const deleteProductColor = asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['ProductColor']
     const data = req.body;
     const deletedProductColor = await deleteProductColorService(data);
     return res.sendStatus(204);

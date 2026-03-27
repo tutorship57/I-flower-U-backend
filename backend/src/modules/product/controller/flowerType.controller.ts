@@ -4,23 +4,27 @@ import { createFlowerTypeService, deleteFlowerTypeService, getAllFlowerTypesServ
 
 
 const getAllFlowerTypes = asyncHandler( async (req: Request, res: Response) => {
+    // #swagger.tags = ['ProductType']
     const flowerTypes = await getAllFlowerTypesService();
     res.status(200).json({data: flowerTypes});
 });
 
 const getFlowerType = asyncHandler( async (req: Request, res: Response) => {
+    // #swagger.tags = ['ProductType']
     const flowerType_id = req.params.flowerType_id;
     const type_idNumber = parseInt(flowerType_id);
     const flowerType = await getFlowerTypeService(type_idNumber);
     res.status(200).json({data: flowerType});
 }); 
 const createFlowerType = asyncHandler( async (req: Request, res: Response) => {
+    // #swagger.tags = ['ProductType']
     const data = req.body;
     const newFlowerType = await createFlowerTypeService(data);
     res.status(201).json({data: newFlowerType});
 });
 
 const updateFlowerType = asyncHandler( async (req: Request, res: Response) => {
+    // #swagger.tags = ['ProductType']
     const flowerType_id = req.params.flowerType_id;
     const data = req.body;
     const type_idNumber = parseInt(flowerType_id);
@@ -30,6 +34,7 @@ const updateFlowerType = asyncHandler( async (req: Request, res: Response) => {
 });
 
 const deleteFlowerType = asyncHandler( async (req: Request, res: Response) => {
+    // #swagger.tags = ['ProductType']
     const flowerType_id = req.params.flowerType_id;
     const type_idNumber = parseInt(flowerType_id);
     const deletedFlowerType = await deleteFlowerTypeService(type_idNumber);

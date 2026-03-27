@@ -7,7 +7,7 @@ const router = Router({
     mergeParams: true,
 });
 
-router.get('/:stock_id/transactions',sessionAuth,requireRole('seller','admin'),productResourceOwnershipGuard, getStockTransactionsController);
+router.get('/',sessionAuth,requireRole('seller','admin'),productResourceOwnershipGuard, getStockTransactionsController);
 // router.post('/:stock_id/transactions', createStockTransactionController);
 // router.delete('/:stock_id/transactions/:transaction_id', deleteStockTransactionController);
 

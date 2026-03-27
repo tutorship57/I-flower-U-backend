@@ -4,6 +4,15 @@ import { sessionAuth } from "../../../shared/guards/session.guard";
 import { requireRole } from "../../../shared/guards/role.guard";
 const router = Router();    
 
+/**
+ * @openapi
+ * /api/role/:
+ *   get:
+ *     summary: get all row
+ *     responses:
+ *       200:
+ *         description: สำเร็จ
+ */
 router.get('/',getRoles )
 router.get('/:roleId', getRoleById )
 router.post('/',sessionAuth,requireRole('admin'),createRole)

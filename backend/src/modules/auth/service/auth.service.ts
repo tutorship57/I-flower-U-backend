@@ -1,7 +1,7 @@
 
 import { hashPassword, verifyPassword } from "../../../shared/utils/auth.util";
 import { AppError } from "../../../shared/utils/appErrorCustomize.util";
-import { findUserByEmailService ,createUserService} from "../../user/service/user.service";
+import { findUserByEmailService ,createUserService, getUserProfileService} from "../../user/service/user.service";
 import {createCartService} from "../../cart/service/cart.service";
 import { getRoleByIdService } from "../../user/service/role.service";
 const loginService = async (user_email: string,user_password: string) => {
@@ -18,18 +18,12 @@ const loginService = async (user_email: string,user_password: string) => {
     }
 
     const role = await getRoleByIdService(user.role_id);
+    const userProfile = await getUserProfileService(user.user_id)
     if (!role) {
         console.log('User role not found');
         throw new AppError('Login failed',400);
     }
-
-    const userInfo = {
-        user_id: user.user_id,
-        user_email: user.user_email,
-        user_role: role.role_name,
-    };
-    
-    return {...userInfo, user_role:role.role_name};
+    return userProfile;
 }
 
 const registerService = async (username: string, email: string, password: string) => {

@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../../../shared/middleware/asyncHandler.Middleware";
 
 const getOrderItemById = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['OrderItem']
     const { item_id } = req.params;
     const orderItem = await getOrderItemByIdService(item_id);
     const message = orderItem ? 'Order item fetched successfully' : 'Order item not found';
@@ -11,18 +12,21 @@ const getOrderItemById = asyncHandler( async (req: Request, res: Response ) => {
 });
 
 const getOrderItemsController = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['OrderItem']
     const ReqQueryFilter = req.query;
     const orderItems = await getOrderItemsService(ReqQueryFilter);
     return res.status(200).json({ data: orderItems });
 })
 
 const getOrderItemsByOrderId = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['OrderItem']
     const { order_id } = req.params;
     const orderItems = await getOrderItemsByOrderIdService(order_id);
     return res.status(200).json({data: orderItems});
 });
 
 const createOrderItem = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['OrderItem']
     const data = req.body;
     const newOrderItem = await createOrderItemService(data);
     return res.status(201).json({ data: newOrderItem });
@@ -39,6 +43,7 @@ const createOrderItem = asyncHandler( async (req: Request, res: Response ) => {
 // });
 
 const updateOrderItem = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['OrderItem']
     const { item_id } = req.params;
     const data = req.body;
     const updatedOrderItem = await updateOrderItemService(item_id, data);
@@ -47,6 +52,7 @@ const updateOrderItem = asyncHandler( async (req: Request, res: Response ) => {
 });
 
 const deleteOrderItem = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['OrderItem']
     const { item_id } = req.params;
     const deletedOrderItem = await deleteOrderItemService(item_id);
     return res.status(204);

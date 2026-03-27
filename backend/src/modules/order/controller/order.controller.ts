@@ -4,11 +4,13 @@ import { Request, Response } from "express";
 import { OrderStatusEnum } from "../../../shared/types/enum/order/orderStatus";
 
 const getOrdersController = asyncHandler(async (req: Request, res: Response) => { 
+    // #swagger.tags = ['Order']
     const orders = await getAllOrdersService(); 
     return res.status(200).json({ data: orders });
 });
 
 const getOrderByIdController =asyncHandler(async (req: Request, res: Response) => { 
+    // #swagger.tags = ['Order']
     const { order_id } = req.params;
     const order = await getOrderByIdService(order_id); 
     return res.status(200).json({ data: order });
@@ -28,6 +30,7 @@ const getOrderByIdController =asyncHandler(async (req: Request, res: Response) =
 // });
 
 const deleteOrderController =asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['Order']
     const { order_id } = req.params;
     const deletedOrder = await deleteOrderService(order_id);
     return res.sendStatus(204);

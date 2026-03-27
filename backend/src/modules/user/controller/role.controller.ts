@@ -3,21 +3,25 @@ import { asyncHandler } from '../../../shared/middleware/asyncHandler.Middleware
 import { getAllRolesService ,getRoleByIdService, createRoleService,updateRoleService,deleteRoleService} from '../service/role.service';
 
 const getRoles = asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['Role']
     const roles = await getAllRolesService();
     return res.status(200).json({data: roles});
 });
 const getRoleById = asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['Role']
     const { roleId } = req.params;
     const role = await getRoleByIdService(Number(roleId));
     return res.status(200).json({data: role});
 });
 const createRole = asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['Role']    
     const { roleName } = req.body;
     const newRole = await createRoleService({role_name: roleName});
     return res.status(201).json({data: newRole});
 });
 
 const editRole = asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['Role']    
     const { roleId } = req.params;
     const { roleName } = req.body;
     const updatedRole = await updateRoleService(Number(roleId), {role_name: roleName});
@@ -26,6 +30,7 @@ const editRole = asyncHandler(async (req: Request, res: Response) => {
 
 
 const deleteRole = asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['Role']    
     const { roleId } = req.params;
     const deletedRole = await deleteRoleService(Number(roleId));
     return res.sendStatus(204);

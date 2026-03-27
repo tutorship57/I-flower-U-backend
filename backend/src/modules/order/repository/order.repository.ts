@@ -9,7 +9,20 @@ const orderRepository = {
         });
     },
     getAllOrders: async () => {
-        return await prisma.order.findMany();
+        return await prisma.order.findMany({
+            select:{
+                order_id:true,
+                user_id:true,
+                total_amount:true,
+                order_status:true,
+                created_at:true,
+                user:{
+                    select:{
+                        user_name:true
+                    }
+                }
+            }
+        });
     },
     
     getOrderById: async (order_id: string) => {

@@ -4,12 +4,14 @@ import { asyncHandler } from "../../../shared/middleware/asyncHandler.Middleware
 import { AppError } from "../../../shared/utils/appErrorCustomize.util";
 import { createMockImagesService } from "../service/productImage.service";
 const getAllProductImages = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['ProductImage']
     const images = await getAllProductImagesService();
     const message = images.length ? 'Product images fetched successfully' : 'No product images found';
     return res.status(200).json({ message, images });
 });
 
 const getProductImage = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['ProductImage']
     const { image_id } = req.params;
     const image = await getProductImageService(image_id);
     const message = image ? 'Product image fetched successfully' : 'Product image not found';
@@ -17,6 +19,7 @@ const getProductImage = asyncHandler( async (req: Request, res: Response ) => {
 });
 
 const createMultipleProductImage = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['ProductImage']
     const { product_id } = req.params;
     const files = req.files;
     if (!files || files.length === 0) {
@@ -27,6 +30,7 @@ const createMultipleProductImage = asyncHandler( async (req: Request, res: Respo
     return res.status(201).json({ data: newImages });
 });
 const createMocksProductImage = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['ProductImage']
     const data = req.body;
     if (!data || data.length === 0) {
         throw new AppError("No data provided", 400);
@@ -36,12 +40,14 @@ const createMocksProductImage = asyncHandler( async (req: Request, res: Response
 });
 
 const getImagesByProductId = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['ProductImage']
     const { product_id } = req.params;
     const images = await getImagesByProductIdService(product_id);
     return res.status(200).json({ data: images });
 });
 
 const updateProductImage = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['ProductImage']
     const { image_id } = req.params;
     const data = req.body;
     const updatedImage = await updateProductImageService(image_id, data);
@@ -49,6 +55,7 @@ const updateProductImage = asyncHandler( async (req: Request, res: Response ) =>
 });
 
 const deleteProductImage = asyncHandler( async (req: Request, res: Response ) => {
+    // #swagger.tags = ['ProductImage']
     const { image_id } = req.params;
     const deletedImage = await deleteProductImageService(image_id);
     return res.sendStatus(204);

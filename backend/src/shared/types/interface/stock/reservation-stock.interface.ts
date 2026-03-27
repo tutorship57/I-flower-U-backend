@@ -6,6 +6,14 @@ export interface ReservationStockInterface {
         expiry_at: Date
 };
 
+export interface ReservationStockFilters {
+        reserved_status?:ReservationStatusEnum,
+        order_id?:string,
+        stock_id?:string
+}
+
+
+
 export interface UpdateReservationStatusInterface {
         order_id: string,
         status: ReservationStatusEnum

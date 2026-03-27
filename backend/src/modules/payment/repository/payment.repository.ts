@@ -12,7 +12,14 @@ const mapPaymentStatusToPrisma = (
 const paymentRepository = {
     getPayments: async (filters: { order_id?: string; session_id?: string; paytype_id?: number}) => {
         return await prisma.payment.findMany({
-            where: filters,
+            select:{
+                payment_id:true,
+                order_id:true,
+                session_id:true,
+                amount:true,
+                payment_status:true,
+                created_at:true
+            }
         });
     },
     createPayment: async (data: { order_id: string; session_id: string; paytype_id: number; amount:number,payment_url:string}) => {
