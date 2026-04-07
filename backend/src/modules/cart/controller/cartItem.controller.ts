@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../../../shared/middleware/asyncHandler.Middleware";
-import {getCartItemsByCartIdService, createCartItemService, updateCartItemService,updateCartItemQuantityService,deleteCartItemService, getAggregateCartItemsByCartIdService, deleteAllCartItemsService} from "../service/cartItem.service";
+import {getCartItemsByCartIdService, createCartItemService, updateCartItemService,updateCartItemQuantityService,deleteCartItemService, getAggregateCartItemsByCartIdService, deleteAllCartItemsService, getCartItemByProductIdService} from "../service/cartItem.service";
 
 const getCartItemsByCartIdController = asyncHandler(async (req: Request, res: Response) => {
     // #swagger.tags = ['CartItem']
@@ -8,6 +8,15 @@ const getCartItemsByCartIdController = asyncHandler(async (req: Request, res: Re
     const cartItems = await getCartItemsByCartIdService(cart_id);
     return res.status(200).json({
         data:cartItems
+    });
+});
+
+const getCartItemByProductIdController = asyncHandler(async (req: Request, res: Response) => {
+    // #swagger.tags = ['CartItem']
+    const {cart_id,product_id} = req.params
+    const cartItem = await getCartItemByProductIdService(cart_id,product_id)
+    return res.status(200).json({
+        data:cartItem
     });
 });
 
@@ -64,4 +73,4 @@ const deleteAllCartItemsController = asyncHandler(async (req: Request, res: Resp
     return res.sendStatus(204);
 });
 
-export {getCartItemsByCartIdController,getAggregateCartItemController ,updateCartItemQuantityController,createCartItemController, updateCartItemController, deleteCartItemController,deleteAllCartItemsController};
+export {getCartItemsByCartIdController,getCartItemByProductIdController,getAggregateCartItemController ,updateCartItemQuantityController,createCartItemController, updateCartItemController, deleteCartItemController,deleteAllCartItemsController};

@@ -6,6 +6,11 @@ const getCartItemsByCartIdService = async (cart_id: string) => {
     return cartItems;
 }
 
+const getCartItemByProductIdService = async (cart_id: string,product_id:string)=>{
+    const cartItem = await cartItemRepository.getCartItemById(cart_id,product_id)
+    return cartItem;
+}
+
 const getAggregateCartItemsByCartIdService = async (cart_id: string) => {
     const cartItemsAggregate = await cartItemRepository.getCartItemsSumByCartId(cart_id);
     return cartItemsAggregate;
@@ -50,4 +55,4 @@ const deleteAllCartItemsService = async (cart_id: string) => {
     return await cartItemRepository.deleteAllCartItems(cart_id);
 }
 
-export {getCartItemsByCartIdService, updateCartItemQuantityService,getAggregateCartItemsByCartIdService, createCartItemService, updateCartItemService, deleteCartItemService, deleteAllCartItemsService};
+export {getCartItemsByCartIdService, getCartItemByProductIdService,updateCartItemQuantityService,getAggregateCartItemsByCartIdService, createCartItemService, updateCartItemService, deleteCartItemService, deleteAllCartItemsService};
