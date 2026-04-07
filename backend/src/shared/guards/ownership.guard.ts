@@ -6,12 +6,13 @@ import { getCartByUserIdService } from '../../modules/cart/service/cart.service'
 import { getPaymentByOrderIdService } from '../../modules/payment/service/payment.service';
 
 export const userResourceOwnershipGuard =  (req: Request, res: Response, next: NextFunction) => {
-    const userRole = req.session?.user_id;
+    const user_id = req.session?.user_id;
     const searchedUserId = req.params.user_id;
-    
+    const userRole = req.session?.user_role;
+    console.log("this is ",userRole)
     if(userRole === 'admin') return next();
 
-    if (userRole !== searchedUserId) {
+    if (user_id !== searchedUserId) {
       return next(new AppError("Forbidden: insufficient permissions", 403));
     }
     next();
@@ -26,7 +27,7 @@ export const productResourceOwnershipGuard = async (req: Request, res: Response,
 
       const product = await getProductOwnerShipService(product_id);
       const ownerProduct = product.shop.user_id;
-
+      console.log("error ownership ")
       if (userRole === 'admin') return next();
 
       if (userId !== ownerProduct) {
