@@ -11,6 +11,7 @@ import { seedProductsImages } from "./seeds/productImage.seed";
 import { seedProductTagEvent } from "./seeds/productTagEvent.seed";
 import { seedProductsStock } from "./seeds/productStock.seed";
 import { seedPaymentType } from "./seeds/paymentType.seed";
+import { seedCart } from "./seeds/cart.seed";
 
 async function main() {
     await prisma.$transaction(async (tx) => {
@@ -20,6 +21,7 @@ async function main() {
     await seedCategories(tx)
     await seedTagEvents(tx)
     await seedUser(tx)
+    await seedCart(tx)
     await seedShops(tx)
     await seedProducts(tx)
     await seedProductsImages(tx)

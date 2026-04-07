@@ -7,7 +7,7 @@ export const seedProductsStock = async (prisma:Prisma.TransactionClient) => {
     const productStockData = product.map((product) => {
         return {
             product_id: product.product_id,
-            stock_qty: 10,
+            stock_qty: 100,
         };
     });
 
