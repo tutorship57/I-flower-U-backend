@@ -34,29 +34,19 @@ export const recommendationWorker = new Worker(
       });
 
       const responseText = response.text;
-      console.log("AI Response :", responseText);
-      console.log("json Parsed :", JSON.parse(response.text));
-      const responseJson = flowerRecommendationSchema.parse(
-        JSON.parse(response.text),
-      );
+      const responseJson = JSON.parse(response.text);
+      console.log("this is ai response",responseJson)
+      
+      // const validFlowers = validateFlowersFromDB(
+      //   responseJson.suitable_flowers,
+      //   flowerName,
+      // );
 
-      const validFlowers = validateFlowersFromDB(
-        responseJson.suitable_flowers,
-        flowerName,
-      );
-
-      if (validFlowers.length < 3) {
-        throw new AppError(
-          "The recommended flowers are not sufficient or invalid.",
-          500,
-        );
-      }
-
-      responseJson.suitable_flowers = validFlowers;
-      responseJson.suitable_flowers = validFlowers.map((flower) => {
-        const flower_id = flowerIdsObj[flower];
-        return flower_id;
-      });
+      // responseJson.suitable_flowers = validFlowers;
+      // responseJson.suitable_flowers = validFlowers.map((flower) => {
+      //   const flower_id = flowerIdsObj[flower];
+      //   return flower_id;
+      // });
       let redisData: recommendationData = responseJson;
       redisData.error = null;
       redisData.status = RecommendationStatus.SUCCESS;
